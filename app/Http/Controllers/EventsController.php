@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Workshop;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -96,8 +97,16 @@ class EventsController extends BaseController
     ]
      */
 
-    public function getEventsWithWorkshops() {
-        throw new \Exception('implement in coding task 1');
+    public function getEventsWithWorkshops(): \Illuminate\Http\JsonResponse
+    {
+
+        $events = Event::all();
+        $response = [];
+        foreach ($events as $k => $event) {
+            $response[$k] = $event->toArray();
+            $response[$k]['workshops'] = Workshop::where('event_id', $event->id)->get()->toArray();
+        }
+        return response()->json($response);
     }
 
 
@@ -176,6 +185,9 @@ class EventsController extends BaseController
      */
 
     public function getFutureEventsWithWorkshops() {
+
+        $wokshops = Workshop::where('');
+
         throw new \Exception('implement in coding task 2');
     }
 }
