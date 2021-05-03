@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\Workshop;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -186,8 +187,22 @@ class EventsController extends BaseController
 
     public function getFutureEventsWithWorkshops() {
 
-        $wokshops = Workshop::where('');
+        $workshops = Workshop::where('start', '>' , Carbon::now())->get();
 
-        throw new \Exception('implement in coding task 2');
+        $response = $data = [];
+        foreach ($workshops as $k => $workshop) {
+            if (isset($workshop->event_id)) {
+                $data[$workshop->event_id]['workshops'][] = $workshop->toArray();
+            } else {
+                $data[$workshop->event_id]['workshops'][0] = $workshop->toArray();
+            }
+        }
+        foreach ($data as $k => $workshop) {
+            $response[$k] = Event::where('id', $k)->first()->toArray();
+            $response[$k]['workshops'] = $workshop['workshops'];
+        }
+        array_multisort($response, SORT_ASC);
+      
+        return response()->json($response);
     }
 }

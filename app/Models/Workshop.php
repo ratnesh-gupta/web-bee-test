@@ -10,6 +10,6 @@ use Illuminate\Support\Facades\Date;
 class Workshop extends Model
 {
     public function event(){
-        $this->belongsTo(Event::class, 'event_id', 'id');
+        return $this->belongsTo(Event::class, 'event_id', 'id');
     }
 }

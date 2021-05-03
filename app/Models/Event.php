@@ -9,6 +9,6 @@ class Event extends Model
 {
 
     public function workshops(){
-        $this->hasMany('App\Models\Workshop', 'id','event_id');
+        return $this->hasMany('App\Models\Workshop', 'id','event_id');
     }
 }
